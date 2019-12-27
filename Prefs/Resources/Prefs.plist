@@ -367,7 +367,7 @@
 			<key>cell</key>
 			<string>PSGroupCell</string>
 			<key>footerText</key>
-			<string>Axon by Nepeta and BawAppie</string>
+			<string>Axon by Nepeta | Updated by BawAppie | Tweaked by _kritanta</string>
 			<key>isStaticText</key>
 			<true/>
 		</dict>
