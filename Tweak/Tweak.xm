@@ -17,6 +17,8 @@ NSInteger alignment;
 NSInteger verticalPosition;
 CGFloat spacing;
 
+NSDictionary *prefs = nil;
+
 void updateViewConfiguration() {
     if (initialized && [AXNManager sharedInstance].view) {
         [AXNManager sharedInstance].view.hapticFeedback = hapticFeedback;
@@ -677,6 +679,59 @@ static void displayStatusChanged(CFNotificationCenterRef center, void *observer,
     [[AXNManager sharedInstance].view refresh];
 }
 
+static void *observer = NULL;
+
+static void reloadPrefs() 
+{
+    if ([NSHomeDirectory() isEqualToString:@"/var/mobile"]) 
+    {
+        CFArrayRef keyList = CFPreferencesCopyKeyList((CFStringRef)kIdentifier, kCFPreferencesCurrentUser, kCFPreferencesAnyHost);
+
+        if (keyList) 
+        {
+            prefs = (NSDictionary *)CFBridgingRelease(CFPreferencesCopyMultiple(keyList, (CFStringRef)kIdentifier, kCFPreferencesCurrentUser, kCFPreferencesAnyHost));
+
+            if (!prefs) 
+            {
+                prefs = [NSDictionary new];
+            }
+            CFRelease(keyList);
+        }
+    } 
+    else 
+    {
+        prefs = [NSDictionary dictionaryWithContentsOfFile:kSettingsPath];
+    }
+}
+
+
+static BOOL boolValueForKey(NSString *key, BOOL defaultValue) 
+{
+    return (prefs && [prefs objectForKey:key]) ? [[prefs objectForKey:key] boolValue] : defaultValue;
+}
+
+static void preferencesChanged() 
+{
+    CFPreferencesAppSynchronize((CFStringRef)kIdentifier);
+    reloadPrefs();
+
+    enabled = boolValueForKey(@"Enabled", YES);
+    vertical = boolValueForKey(@"Vertical", NO);
+    hapticFeedback = boolValueForKey(@"HapticFeedback", YES);
+    badgesEnabled = boolValueForKey(@"BadgesEnabled", YES);
+    badgesShowBackground = boolValueForKey(@"BadgesShowBackground", YES);
+    darkMode = boolValueForKey(@"DarkMode", NO);
+    sortingMode = [prefs objectForKey:@"SortingMode"] ? [[prefs valueForKey:@"SortingMode"] intValue] : 0;
+    selectionStyle = [prefs objectForKey:@"SelectionStyle"] ? [[prefs valueForKey:@"SelectionStyle"] intValue] : 0;
+    style = [prefs objectForKey:@"Style"] ? [[prefs valueForKey:@"Style"] intValue] : 0;
+    showByDefault = [prefs objectForKey:@"ShowByDefault"] ? [[prefs valueForKey:@"ShowByDefault"] intValue] : 0;
+    alignment = [prefs objectForKey:@"Alignment"] ? [[prefs valueForKey:@"Alignment"] intValue] : 0;
+    verticalPosition = [prefs objectForKey:@"VerticalPosition"] ? [[prefs valueForKey:@"VerticalPosition"] intValue] : 0;
+    spacing = [prefs objectForKey:@"Spacing"] ? [[prefs valueForKey:@"Spacing"] floatValue] : 10.0;
+
+    updateViewConfiguration();
+}
+
 %ctor{
     NSLog(@"[Axon] init");
 
@@ -686,23 +741,14 @@ static void displayStatusChanged(CFNotificationCenterRef center, void *observer,
     || [[NSFileManager defaultManager] fileExistsAtPath:@"/private/var/mobile/Documents/xyz.willy.Zebra/zebra.db"]);*/
     if (!dpkgInvalid) dpkgInvalid = ![[NSFileManager defaultManager] fileExistsAtPath:@"/var/lib/dpkg/info/me.nepeta.axon.md5sums"];
 
-    HBPreferences *preferences = [[HBPreferences alloc] initWithIdentifier:@"me.nepeta.axon"];
-    [preferences registerBool:&enabled default:YES forKey:@"Enabled"];
-    [preferences registerBool:&vertical default:NO forKey:@"Vertical"];
-    [preferences registerBool:&hapticFeedback default:YES forKey:@"HapticFeedback"];
-    [preferences registerBool:&badgesEnabled default:YES forKey:@"BadgesEnabled"];
-    [preferences registerBool:&badgesShowBackground default:YES forKey:@"BadgesShowBackground"];
-    [preferences registerBool:&darkMode default:NO forKey:@"DarkMode"];
-    [preferences registerInteger:&sortingMode default:0 forKey:@"SortingMode"];
-    [preferences registerInteger:&selectionStyle default:0 forKey:@"SelectionStyle"];
-    [preferences registerInteger:&style default:0 forKey:@"Style"];
-    [preferences registerInteger:&showByDefault default:0 forKey:@"ShowByDefault"];
-    [preferences registerInteger:&alignment default:1 forKey:@"Alignment"];
-    [preferences registerInteger:&verticalPosition default:0 forKey:@"VerticalPosition"];
-    [preferences registerFloat:&spacing default:10.0 forKey:@"Spacing"];
-    [preferences registerPreferenceChangeBlock:^() {
-        updateViewConfiguration();
-    }];
+    CFNotificationCenterAddObserver(
+        CFNotificationCenterGetDarwinNotifyCenter(),
+        &observer,
+        (CFNotificationCallback)preferencesChanged,
+        (CFStringRef)@"me.nepeta.axon/ReloadPrefs",
+        NULL,
+        CFNotificationSuspensionBehaviorDeliverImmediately
+    );
 
     if (!dpkgInvalid && enabled) {
         BOOL ok = false;
