@@ -4,12 +4,12 @@
 // #import <CepheiPrefs/HBAppearanceSettings.h>
 // #import <Cephei/HBPreferences.h>
 #import "NSTask.h"
-
+/*
 @interface AXNAppearanceSettings : PSListController
 // @interface AXNAppearanceSettings : HBAppearanceSettings
 
 @end
-
+*/
 // @interface AXNPrefsListController : HBRootListController {
 @interface AXNPrefsListController : PSListController {
     UITableView * _table;
