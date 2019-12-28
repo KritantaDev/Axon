@@ -629,6 +629,25 @@ void updateViewConfiguration() {
 }
 %end
 
+@interface NCNotificationListSectionHeaderView : UIView
+@end
+
+%hook NCNotificationListSectionHeaderView
+// Remove Section Header Text
+
+- (void)layoutSubviews
+{
+    self.hidden = 1;
+}
+- (CGRect)frame 
+{
+    return CGRectZero;
+}
+- (void)setFrame:(CGRect)arg1
+{
+    %orig(CGRectZero);
+}
+%end
 
 %end
 
@@ -733,6 +752,7 @@ static void preferencesChanged()
 }
 
 %ctor{
+    preferencesChanged();
     NSLog(@"[Axon] init");
 
     dpkgInvalid = ![[NSFileManager defaultManager] fileExistsAtPath:@"/var/lib/dpkg/info/me.nepeta.axon.list"];
