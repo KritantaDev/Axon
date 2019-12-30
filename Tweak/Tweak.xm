@@ -753,6 +753,7 @@ static void preferencesChanged()
 
 %ctor{
     preferencesChanged();
+    
     NSLog(@"[Axon] init");
 
     dpkgInvalid = ![[NSFileManager defaultManager] fileExistsAtPath:@"/var/lib/dpkg/info/me.nepeta.axon.list"];

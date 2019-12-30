@@ -4,9 +4,9 @@
 #import "RandomHeaders.h"
 #import "AXNView.h"
 
-#define kIdentifier @"me.nepeta.axonprefs"
+#define kIdentifier @"me.nepeta.axon"
 #define kSettingsChangedNotification (CFStringRef)@"me.nepeta.axon/ReloadPrefs"
-#define kSettingsPath @"/var/mobile/Library/Preferences/me.nepeta.axonprefs.plist"
+#define kSettingsPath @"/var/mobile/Library/Preferences/me.nepeta.axon.plist"
 
 @interface SBDashBoardNotificationAdjunctListViewController : UIViewController {
     UIStackView* _stackView;
