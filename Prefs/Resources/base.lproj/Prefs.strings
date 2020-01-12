@@ -12,7 +12,8 @@
   "PACKED" = "Packed";
   "COMPACT" = "Compact";
   "TINY" = "Tiny";
-  "GROUP" = "Group (Beta, Respring required)";
+  "GROUP" = "Group (Beta)*";
+  "ROUNDED_GROUP" = "Rounded Group (Beta)*";
 
   "SHOW" = "Show by default";
   "NOTHING" = "Nothing";

@@ -88,6 +88,7 @@
 				<integer>2</integer>
 				<integer>3</integer>
 				<integer>4</integer>
+				<integer>5</integer>
 			</array>
 			<key>validTitles</key>
 			<array>
@@ -96,6 +97,7 @@
 				<string>COMPACT</string>
 				<string>TINY</string>
 				<string>GROUP</string>
+				<string>ROUNDED_GROUP</string>
 			</array>
 			<key>PostNotification</key>
 			<string>me.nepeta.axon/ReloadPrefs</string>
@@ -256,7 +258,22 @@
 			<key>PostNotification</key>
 			<string>me.nepeta.axon/ReloadPrefs</string>
 		</dict>
-
+		<dict>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<true/>
+			<key>defaults</key>
+			<string>me.nepeta.axon</string>
+			<key>label</key>
+			<string>Dim fades entire cell</string>
+			<key>key</key>
+			<string>FadeCell</string>
+			<key>alternateColors</key>
+			<true/>
+			<key>PostNotification</key>
+			<string>me.nepeta.axon/ReloadPrefs</string>
+		</dict>
 		<dict>
 			<key>cell</key>
 			<string>PSGroupCell</string>
@@ -399,6 +416,16 @@
 			<key>url</key>
 			<string>https://github.com/Baw-Appie/Axon</string>
 		</dict> -->
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>label</key>
+			<string></string>
+			<key>isStaticText</key>
+			<true/>
+			<key>footerText</key>
+			<string>Axon, originally by NepetaDev and Updated by BawAppie, is a rewrite of PriorityHub for iOS 11 and higher. It is licensed under MIT. This version was created by _kritanta to remove Cephei from preferences, and to fix some issues I had personally been having. All credit for the update and new themes goes to BawAppie. The "Rounded Group" theme is a slightly modified version of BawAppie's "Group" Theme, included by _kritanta.</string>
+		</dict>
 	</array>
 	<key>title</key>
 	<string>Axon</string>
