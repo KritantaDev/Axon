@@ -9,6 +9,7 @@ BOOL badgesEnabled;
 BOOL badgesShowBackground;
 BOOL hapticFeedback;
 BOOL darkMode;
+BOOL fadeEntireCell;
 NSInteger sortingMode;
 NSInteger selectionStyle;
 NSInteger style;
@@ -540,13 +541,17 @@ void updateViewConfiguration() {
         ]];
 
 
-        if (style != 4) {
+        if (style <= 3) {
             [NSLayoutConstraint activateConstraints:@[
                 [self.axnView.heightAnchor constraintEqualToConstant:90]
             ]];
-        } else {
+        } else if (style ==4){
             [NSLayoutConstraint activateConstraints:@[
                 [self.axnView.heightAnchor constraintEqualToConstant:30]
+            ]];
+        } else {
+            [NSLayoutConstraint activateConstraints:@[
+                [self.axnView.heightAnchor constraintEqualToConstant:40]
             ]];
         }
     }
@@ -599,13 +604,17 @@ void updateViewConfiguration() {
         ]];
 
 
-        if (style != 4) {
+        if (style <= 3) {
             [NSLayoutConstraint activateConstraints:@[
                 [self.axnView.heightAnchor constraintEqualToConstant:90]
             ]];
-        } else {
+        } else if (style ==4){
             [NSLayoutConstraint activateConstraints:@[
                 [self.axnView.heightAnchor constraintEqualToConstant:30]
+            ]];
+        } else {
+            [NSLayoutConstraint activateConstraints:@[
+                [self.axnView.heightAnchor constraintEqualToConstant:40]
             ]];
         }
     }
@@ -747,6 +756,10 @@ static void preferencesChanged()
     alignment = [prefs objectForKey:@"Alignment"] ? [[prefs valueForKey:@"Alignment"] intValue] : 0;
     verticalPosition = [prefs objectForKey:@"VerticalPosition"] ? [[prefs valueForKey:@"VerticalPosition"] intValue] : 0;
     spacing = [prefs objectForKey:@"Spacing"] ? [[prefs valueForKey:@"Spacing"] floatValue] : 10.0;
+    fadeEntireCell = boolValueForKey(@"FadeCell", YES);
+
+    [AXNManager sharedInstance].style = style;
+    [AXNManager sharedInstance].fadeEntireCell = fadeEntireCell;
 
     updateViewConfiguration();
 }
