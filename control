@@ -2,7 +2,7 @@ Package: me.nepeta.axon
 Name: Axon
 Depends: mobilesubstrate, firmware (>= 11.0)
 Conflicts: io.ominousness.stackxi, com.thomasfinch.priorityhub, com.ioscreatix.intelixbeta, com.ioscreatix.intelix, com.spiritoflogic.ncunify, com.spiritoflogic.unifyx, com.hidan.nclink10, org.coolstar.ventana-modern, org.coolstar.ventana, org.s1ris.spinxi
-Version: 0.3.0-nocephie
+Version: 0.4.0-nocephie
 Architecture: iphoneos-arm
 Description: Priority Hub for iOS 11+
 Depiction: http://repo.kritanta.me/depictions/?id=me.nepeta.axon
