@@ -85,9 +85,22 @@
             [self.badgeLabel.bottomAnchor constraintEqualToAnchor:self.bottomAnchor constant:-5],
             [self.badgeLabel.leadingAnchor constraintEqualToAnchor:self.leadingAnchor],
             [self.badgeLabel.trailingAnchor constraintEqualToAnchor:self.trailingAnchor constant:-5],
+        ],
+        @[  // group rounded
+            [self.iconView.topAnchor constraintEqualToAnchor:self.topAnchor constant:8],
+            [self.iconView.leadingAnchor constraintEqualToAnchor:self.leadingAnchor constant:3],
+            [self.iconView.trailingAnchor constraintEqualToAnchor:self.trailingAnchor constant:-26],
+            [self.iconView.bottomAnchor constraintEqualToAnchor:self.bottomAnchor constant:-8],
+
+            [self.badgeLabel.centerXAnchor constraintEqualToAnchor:self.centerXAnchor],
+            [self.badgeLabel.topAnchor constraintEqualToAnchor:self.topAnchor constant:8],
+            [self.badgeLabel.bottomAnchor constraintEqualToAnchor:self.bottomAnchor constant:-8],
+            [self.badgeLabel.leadingAnchor constraintEqualToAnchor:self.leadingAnchor constant:33],
+            [self.badgeLabel.trailingAnchor constraintEqualToAnchor:self.trailingAnchor constant:-7],
         ]
     ];
 
+    if (_style == 5) self.alpha = 0.5;
     return self;
 }
 
@@ -120,10 +133,10 @@
 -(void)setBundleIdentifier:(NSString *)value {
     _bundleIdentifier = value;
 
-    self.iconView.image = [[AXNManager sharedInstance] getIcon:value];
+    self.iconView.image = [[AXNManager sharedInstance] getIcon:value withStyle:_style];
 
     self.badgeLabel.backgroundColor = [UIColor clearColor];
-    if(_style != 4) self.badgeLabel.textColor = [[AXNManager sharedInstance] fallbackColor];
+    if(_style !=4) self.badgeLabel.textColor = [[AXNManager sharedInstance] fallbackColor];
 
     BOOL iOS13 = [[[UIDevice currentDevice] systemVersion] floatValue] >= 13;
 
@@ -141,6 +154,10 @@
                 [weakSelf badgeLabel].textColor = [analysis.primaryTextColor copy];
             }];
         }
+    }
+    if (_style == 5)
+    {
+        self.badgeLabel.backgroundColor = [UIColor colorWithWhite:0.0 alpha:0.2];
     }
 }
 
@@ -173,14 +190,22 @@
         self.badgeLabel.textAlignment = NSTextAlignmentRight;
         self.badgeLabel.backgroundColor = [UIColor clearColor];
         self.badgeLabel.textColor = [UIColor blackColor];
+
         [self addSubview:self.blurView];
         [self addSubview:self.badgeLabel];
         [self addSubview:self.iconView];
+    } else if (style == 5) 
+    {
+        self.layer.cornerRadius = 18;
+        [self addSubview:self.blurView];
+        [self addSubview:self.badgeLabel];
+        [self addSubview:self.iconView];
+        self.alpha = 0.5;
+        self.badgeLabel.backgroundColor = [UIColor colorWithWhite:0.0 alpha:0.2];
     } else {
         [self addSubview:self.iconView];
         [self addSubview:self.badgeLabel];
     }
-
     if (oldStyle != -1) [NSLayoutConstraint deactivateConstraints:_styleConstraints[oldStyle]];
     [NSLayoutConstraint activateConstraints:_styleConstraints[_style]];
     [self setNeedsLayout];
@@ -193,8 +218,11 @@
         [UIView animateWithDuration:0.15 delay:0.0 options:UIViewAnimationOptionCurveEaseIn animations:^{
             switch (self.selectionStyle) {
                 case 1:
-                    self.iconView.alpha = 1.0;
-                    self.badgeLabel.alpha = 1.0;
+                    if (![AXNManager sharedInstance].fadeEntireCell)
+                    {
+                        self.iconView.alpha = 1;
+                        self.badgeLabel.alpha = 1;
+                    } else {self.alpha = 1;}
                     break;
                 default:
                     if (!self.darkMode) self.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:0.5];
@@ -205,8 +233,11 @@
         [UIView animateWithDuration:0.15 delay:0.0 options:UIViewAnimationOptionCurveEaseIn animations:^{
             switch (self.selectionStyle) {
                 case 1:
-                    self.iconView.alpha = 0.5;
-                    self.badgeLabel.alpha = 0.5;
+                    if (![AXNManager sharedInstance].fadeEntireCell)
+                    {
+                        self.iconView.alpha = 0.5;
+                        self.badgeLabel.alpha = 0.5;
+                    } else {self.alpha = 0.5;}
                     break;
                 default:
                     self.backgroundColor = [UIColor clearColor];

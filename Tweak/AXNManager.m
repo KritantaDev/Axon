@@ -76,7 +76,19 @@
     else return 0;
 }
 
--(UIImage *)getIcon:(NSString *)bundleIdentifier {
+- (UIImage *)getRoundedRectImageFromImage:(UIImage *)image
+{
+    UIGraphicsBeginImageContextWithOptions(CGRectMake(0,0,60,60).size, NO, 1.0);
+    [[UIBezierPath bezierPathWithRoundedRect:CGRectMake(0,0,60,60)
+                                cornerRadius:30] addClip];
+    [image drawInRect:CGRectMake(0,0,60,60)];
+    UIImage *finalImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+
+    return finalImage;
+}
+
+-(UIImage *)getIcon:(NSString *)bundleIdentifier withStyle:(NSInteger)style {
     if (self.iconStore[bundleIdentifier]) return self.iconStore[bundleIdentifier];
     UIImage *image;
     SBIconModel *model;
@@ -111,9 +123,13 @@
         image = [UIImage _applicationIconImageForBundleIdentifier:bundleIdentifier format:0 scale:[UIScreen mainScreen].scale];
     }
 
+
+    if (self.style == 5) image = [self getRoundedRectImageFromImage:image];
+
     if (image) {
         self.iconStore[bundleIdentifier] = [image copy];
     }
+
 
     return image ?: [UIImage new];
 }

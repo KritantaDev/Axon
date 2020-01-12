@@ -4,6 +4,8 @@
 
 @interface AXNManager : NSObject
 
+@property (nonatomic, assign) NSInteger style;
+@property (nonatomic, assign) BOOL fadeEntireCell;
 @property (nonatomic, retain) NSMutableDictionary *notificationRequests;
 @property (nonatomic, retain) NSMutableDictionary *names;
 @property (nonatomic, retain) NSMutableDictionary *timestamps;
@@ -24,7 +26,7 @@
 -(void)insertNotificationRequest:(id)req;
 -(void)removeNotificationRequest:(id)req;
 -(void)modifyNotificationRequest:(id)req;
--(UIImage *)getIcon:(NSString *)bundleIdentifier;
+-(UIImage *)getIcon:(NSString *)bundleIdentifier withStyle:(NSInteger)style;
 -(void)clearAll:(NSString *)bundleIdentifier;
 
 -(void)showNotificationRequest:(id)req;
@@ -42,5 +44,6 @@
 
 -(void)invalidateCountCache;
 -(NSInteger)countForBundleIdentifier:(NSString *)bundleIdentifier;
+- (UIImage *)getRoundedRectImageFromImage:(UIImage *)image;
 
 @end
