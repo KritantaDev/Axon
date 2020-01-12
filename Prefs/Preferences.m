@@ -46,7 +46,7 @@
 
 - (id)specifiers {
     if(_specifiers == nil) {
-        _specifiers = [[self loadSpecifiersFromPlistName:@"Prefs" target:self] retain];
+        _specifiers = [self loadSpecifiersFromPlistName:@"Prefs" target:self];
         BOOL iOS13 = [[[UIDevice currentDevice] systemVersion] floatValue] >= 13;
         for (PSSpecifier *specifier in _specifiers) {
     			if([[specifier propertyForKey:@"id"] isEqualToString:@"BADGES"] && iOS13) [specifier setProperty:@"Note: Some features are not available for iOS 13 and later." forKey:@"footerText"];
@@ -125,7 +125,7 @@
 }
 
 - (void)respring:(id)sender {
-    NSTask *t = [[[NSTask alloc] init] autorelease];
+    NSTask *t = [[NSTask alloc] init];
     [t setLaunchPath:@"/usr/bin/killall"];
     [t setArguments:[NSArray arrayWithObjects:@"backboardd", nil]];
     [t launch];
