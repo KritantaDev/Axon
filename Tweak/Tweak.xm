@@ -334,9 +334,7 @@ void updateViewConfiguration() {
 -(void)_setDisplayedImage:(UIImage *)image
 {
     %orig;
-    if (![[[AXNManager sharedInstance] wallpaperImageHash] isEqualToString:[self displayedImageHashString]])
         [[AXNManager sharedInstance] updateWallpaperColors:image];
-    [[AXNManager sharedInstance] setWallpaperImageHash:[self displayedImageHashString]];
 }
 
 %end
