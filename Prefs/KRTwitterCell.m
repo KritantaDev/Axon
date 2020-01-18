@@ -9,8 +9,6 @@
 
 #import "KRTwitterCell.h"
 #import <Preferences/PSSpecifier.h>
-#import <UIKit/UIImage+Private.h>
-#import <Foundation/Foundation.h>
 
 @interface KRLinkCell ()
 
@@ -103,7 +101,6 @@
 		dispatch_async(dispatch_get_main_queue(), ^{
 			self.avatarImage = [UIImage imageWithData: data];
 		});
-		[data release];
 	});*/
 }
 
