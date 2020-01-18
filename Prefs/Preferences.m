@@ -1,17 +1,19 @@
 #import "Preferences.h"
 
+
 @implementation AXNPrefsListController
 @synthesize respringButton;
 
 - (instancetype)init {
     self = [super init];
+    self.loadHeaderView = YES;
 
     if (self) {
         self.respringButton = [[UIBarButtonItem alloc] initWithTitle:@"Respring"
                                     style:UIBarButtonItemStylePlain
                                     target:self
                                     action:@selector(respring:)];
-        self.respringButton.tintColor = [UIColor whiteColor];
+        self.respringButton.tintColor = [UIColor colorWithRed:182.0f/255.0f green:179.0f/255.0f blue:250.0f/255.0f alpha:1.0];
         self.navigationItem.rightBarButtonItem = self.respringButton;
         self.navigationItem.titleView = [UIView new];
         self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0,0,10,10)];
@@ -44,6 +46,13 @@
     return self;
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    [UISegmentedControl appearanceWhenContainedInInstancesOfClasses:@[self.class]].tintColor = [UIColor colorWithRed:0.169 green:0.184 blue:0.275 alpha:1.0];
+    [[UISwitch appearanceWhenContainedInInstancesOfClasses:@[self.class]] setOnTintColor:[UIColor colorWithRed:0.169 green:0.184 blue:0.275 alpha:1.0]];
+    [[UISlider appearanceWhenContainedInInstancesOfClasses:@[self.class]] setTintColor:[UIColor colorWithRed:0.169 green:0.184 blue:0.275 alpha:1.0]];
+    [super viewWillAppear:animated];
+}    
+
 - (id)specifiers {
     if(_specifiers == nil) {
         _specifiers = [[self loadSpecifiersFromPlistName:@"Prefs" target:self] retain];
@@ -58,6 +67,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    if (!self.loadHeaderView) return;
 
     self.headerView = [[UIView alloc] initWithFrame:CGRectMake(0,0,200,200)];
     self.headerImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0,0,200,200)];
@@ -80,7 +90,7 @@
     tableView.tableHeaderView = self.headerView;
     return [super tableView:tableView cellForRowAtIndexPath:indexPath];
 }
-
+/*
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 
@@ -104,11 +114,11 @@
 
     [self.navigationController.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor blackColor]}];
 }
-
+*/
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     CGFloat offsetY = scrollView.contentOffset.y;
 
-    if (offsetY > 200) {
+    if (offsetY > 112) {
         [UIView animateWithDuration:0.2 animations:^{
             self.iconView.alpha = 1.0;
             self.titleLabel.alpha = 0.0;
@@ -131,3 +141,99 @@
     [t launch];
 }
 @end
+
+@implementation AXNLayoutListController
+
+- (instancetype)init 
+{
+    self = [super init];
+
+    if (self) 
+    {
+        self.titleLabel.text = @"Layout";
+        self.iconView.alpha = 1;
+    }
+
+    return self;
+}
+
+- (void)viewDidLoad 
+{
+    self.loadHeaderView = NO;
+    [super viewDidLoad];
+
+    [self.headerView removeFromSuperview];
+}
+
+- (id)specifiers {
+    if(_specifiers == nil) {
+        _specifiers = [[self loadSpecifiersFromPlistName:@"Layout" target:self] retain];
+    }
+    return _specifiers;
+}
+
+@end
+
+
+@implementation AXNSortingListController
+
+- (instancetype)init 
+{
+    self = [super init];
+
+    if (self) 
+    {
+        self.titleLabel.text = @"Sorting";
+    }
+
+    return self;
+}
+
+
+- (void)viewDidLoad 
+{
+    self.loadHeaderView = NO;
+    [super viewDidLoad];
+
+    [self.headerView removeFromSuperview];
+}
+- (id)specifiers {
+    if(_specifiers == nil) {
+        _specifiers = [[self loadSpecifiersFromPlistName:@"Sorting" target:self] retain];
+    }
+    return _specifiers;
+}
+
+@end
+
+@implementation AXNColorsListController
+
+- (instancetype)init 
+{
+    self = [super init];
+
+    if (self) 
+    {
+        self.titleLabel.text = @"Colors";
+    }
+
+    return self;
+}
+
+- (void)viewDidLoad 
+{
+    self.loadHeaderView = NO;
+    [super viewDidLoad];
+
+    [self.headerView removeFromSuperview];
+}
+
+- (id)specifiers {
+    if(_specifiers == nil) {
+        _specifiers = [[self loadSpecifiersFromPlistName:@"Colors" target:self] retain];
+    }
+    return _specifiers;
+}
+
+@end
+

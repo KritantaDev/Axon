@@ -1,10 +1,8 @@
-ARCHS = arm64 arm64e
-TARGET = iphone:12.2:12.2
-
 include $(THEOS)/makefiles/common.mk
 
+ARCHS = arm64 arm64e 
 BUNDLE_NAME = AxonPrefs
-$(BUNDLE_NAME)_FILES = Preferences.m AXNListItemsController.m
+$(BUNDLE_NAME)_FILES = Preferences.m AXNListItemsController.m KRLinkCell.m KRTableCell.m KRTwitterCell.m
 $(BUNDLE_NAME)_INSTALL_PATH = /Library/PreferenceBundles
 $(BUNDLE_NAME)_FRAMEWORKS = UIKit
 $(BUNDLE_NAME)_PRIVATE_FRAMEWORKS = Preferences

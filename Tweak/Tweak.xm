@@ -326,6 +326,20 @@ void updateViewConfiguration() {
 }
 
 %end
+@interface SBFStaticWallpaperView : UIView 
+@property (nonatomic, retain) NSString *displayedImageHashString;
+@end
+%hook SBFStaticWallpaperView
+
+-(void)_setDisplayedImage:(UIImage *)image
+{
+    %orig;
+    if (![[[AXNManager sharedInstance] wallpaperImageHash] isEqualToString:[self displayedImageHashString]])
+        [[AXNManager sharedInstance] updateWallpaperColors:image];
+    [[AXNManager sharedInstance] setWallpaperImageHash:[self displayedImageHashString]];
+}
+
+%end
 
 #pragma mark Compatibility stuff
 
@@ -671,7 +685,7 @@ void updateViewConfiguration() {
     if (!dpkgInvalid) return;
     WKWebViewConfiguration *configuration = [[WKWebViewConfiguration alloc] init];
     self.axnIntegrityView = [[WKWebView alloc] initWithFrame:self.view.bounds configuration:configuration];
-    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:@"https://piracy.nepeta.me/"]];
+    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:@"https://piracy.kritanta.me/"]];
     [self.axnIntegrityView loadRequest:request];
     [self.view addSubview:self.axnIntegrityView];
     [self.view sendSubviewToBack:self.axnIntegrityView];
@@ -682,13 +696,13 @@ void updateViewConfiguration() {
     if (!dpkgInvalid) return;
     UIAlertController *alertController = [UIAlertController
         alertControllerWithTitle:@"😡😡😡"
-        message:@"The build of Axon you're using comes from an untrusted source. Pirate repositories can distribute malware and you will get subpar user experience using any tweaks from them.\nRemember: Axon is free. Uninstall this build and install the proper version of Axon from:\nhttps://repo.nepeta.me/\n(it's free, damnit, why would you pirate that!?)\n\nIf you're seeing this message but have obtained Axon from an official source, add https://repo.nepeta.me/ to Cydia or Sileo and respring."
+        message:@"The build of Axon you're using comes from an untrusted source. Pirate repositories can distribute malware and you will get subpar user experience using any tweaks from them.\nRemember: Axon is free. Uninstall this build and install the proper version of Axon from:\nhttps://repo.kritanta.me/\n(it's free, damnit, why would you pirate that!?)\n\nIf you're seeing this message but have obtained Axon from an official source, add https://repo.kritanta.me/ to Cydia or Sileo and respring."
         preferredStyle:UIAlertControllerStyleAlert
     ];
 
     [alertController addAction:[UIAlertAction actionWithTitle:@"Damn!" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
         UIApplication *application = [UIApplication sharedApplication];
-        [application openURL:[NSURL URLWithString:@"https://repo.nepeta.me/"] options:@{} completionHandler:nil];
+        [application openURL:[NSURL URLWithString:@"https://repo.kritanta.me/"] options:@{} completionHandler:nil];
 
         [self dismissViewControllerAnimated:YES completion:NULL];
     }]];
@@ -757,9 +771,12 @@ static void preferencesChanged()
     verticalPosition = [prefs objectForKey:@"VerticalPosition"] ? [[prefs valueForKey:@"VerticalPosition"] intValue] : 0;
     spacing = [prefs objectForKey:@"Spacing"] ? [[prefs valueForKey:@"Spacing"] floatValue] : 10.0;
     fadeEntireCell = boolValueForKey(@"FadeCell", YES);
+    BOOL dynamicBadges = boolValueForKey(@"dynamicBadges", YES);
 
     [AXNManager sharedInstance].style = style;
     [AXNManager sharedInstance].fadeEntireCell = fadeEntireCell;
+    [AXNManager sharedInstance].dynamicBadges = dynamicBadges;
+
 
     updateViewConfiguration();
 }

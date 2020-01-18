@@ -101,6 +101,10 @@
     ];
 
     if (_style == 5) self.alpha = 0.5;
+    if ([[AXNManager sharedInstance] dynamicBadges])
+    {
+        self.badgeLabel.textColor = [[[AXNManager sharedInstance] wallpaperColorCache] objectForKey:@"secondary"];
+    }
     return self;
 }
 
@@ -144,6 +148,7 @@
         if ([AXNManager sharedInstance].backgroundColorCache[value] && [AXNManager sharedInstance].textColorCache[value]) {
             self.badgeLabel.backgroundColor = [[AXNManager sharedInstance].backgroundColorCache[value] copy];
             self.badgeLabel.textColor = [[AXNManager sharedInstance].textColorCache[value] copy];
+
         } else {
             __weak AXNAppCell *weakSelf = self;
             MPArtworkColorAnalyzer *colorAnalyzer = [[MPArtworkColorAnalyzer alloc] initWithImage:self.iconView.image algorithm:0];
@@ -159,6 +164,10 @@
     {
         self.badgeLabel.backgroundColor = [UIColor colorWithWhite:0.0 alpha:0.2];
     }
+    if ([[AXNManager sharedInstance] dynamicBadges])
+    {
+        self.badgeLabel.textColor = [[[AXNManager sharedInstance] wallpaperColorCache] objectForKey:@"secondary"];
+    }
 }
 
 -(void)setNotificationCount:(NSInteger)value {
@@ -168,6 +177,10 @@
         self.badgeLabel.text = [NSString stringWithFormat:@"%ld", value];
     } else {
         self.badgeLabel.text = @"99+";
+    }
+    if ([[AXNManager sharedInstance] dynamicBadges])
+    {
+        self.badgeLabel.textColor = [[[AXNManager sharedInstance] wallpaperColorCache] objectForKey:@"secondary"];
     }
 }
 
