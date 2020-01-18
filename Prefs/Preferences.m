@@ -167,7 +167,7 @@
 
 - (id)specifiers {
     if(_specifiers == nil) {
-        _specifiers = [[self loadSpecifiersFromPlistName:@"Layout" target:self] retain];
+        _specifiers = [self loadSpecifiersFromPlistName:@"Layout" target:self];
     }
     return _specifiers;
 }
@@ -199,7 +199,7 @@
 }
 - (id)specifiers {
     if(_specifiers == nil) {
-        _specifiers = [[self loadSpecifiersFromPlistName:@"Sorting" target:self] retain];
+        _specifiers = [self loadSpecifiersFromPlistName:@"Sorting" target:self];
     }
     return _specifiers;
 }
@@ -230,7 +230,7 @@
 
 - (id)specifiers {
     if(_specifiers == nil) {
-        _specifiers = [[self loadSpecifiersFromPlistName:@"Colors" target:self] retain];
+        _specifiers = [self loadSpecifiersFromPlistName:@"Colors" target:self];
     }
     return _specifiers;
 }
